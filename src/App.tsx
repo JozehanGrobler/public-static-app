@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   PieChart,
   Pie,
@@ -11,34 +11,41 @@ import "./App.css";
 
 // Boy and girl name lists
 const boyNames = [
-  "James",
-  "John",
-  "Robert",
-  "Michael",
-  "William",
-  "David",
-  "Richard",
-  "Joseph",
-  "Thomas",
-  "Christopher",
+  "Mariki",
+  "Johan",
+  "Rynhardt",
+  "Ilana",
+  "Tiaan",
+  "Renier",
+  "Erik",
 ];
 
 const girlNames = [
-  "Mary",
-  "Patricia",
-  "Jennifer",
-  "Linda",
-  "Barbara",
-  "Elizabeth",
-  "Susan",
-  "Jessica",
-  "Sarah",
-  "Karen",
+  "Kobus",
+  "Rozanne",
+  "Anzele",
+  "Chrisna",
+  "Heinrigh",
+  "Maryna",
 ];
+
+// Shuffle function
+const shuffleArray = (array: string[]) => {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+};
 
 function App() {
   const [boyCollapsed, setBoyCollapsed] = useState(false);
   const [girlCollapsed, setGirlCollapsed] = useState(false);
+
+  // Randomize names on component mount
+  const randomBoyNames = useMemo(() => shuffleArray(boyNames), []);
+  const randomGirlNames = useMemo(() => shuffleArray(girlNames), []);
 
   // Count votes
   const boyVotes = boyNames.length;
@@ -106,7 +113,7 @@ function App() {
               {boyCollapsed && (
                 <div className="collapsible-content boy-content">
                   <ul className="names-list">
-                    {boyNames.map((name, index) => (
+                    {randomBoyNames.map((name, index) => (
                       <li key={index}>{name}</li>
                     ))}
                   </ul>
@@ -125,7 +132,7 @@ function App() {
               {girlCollapsed && (
                 <div className="collapsible-content girl-content">
                   <ul className="names-list">
-                    {girlNames.map((name, index) => (
+                    {randomGirlNames.map((name, index) => (
                       <li key={index}>{name}</li>
                     ))}
                   </ul>
