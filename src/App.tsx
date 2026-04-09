@@ -18,6 +18,7 @@ const boyNames = [
   "Tiaan",
   "Renier",
   "Erik",
+  "Clarissa",
 ];
 
 const girlNames = [
