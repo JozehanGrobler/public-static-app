@@ -51,6 +51,7 @@ function App() {
   // Count votes
   const boyVotes = boyNames.length;
   const girlVotes = girlNames.length;
+  const totalVotes = boyVotes + girlVotes;
 
   // Prepare data for pie chart
   const chartData = [
@@ -76,7 +77,9 @@ function App() {
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  label={({ name, value }) => `${name}: ${value}`}
+                  label={({ name, value }) =>
+                    `${name}: ${value} (${((value / totalVotes) * 100).toFixed(1)}%)`
+                  }
                   outerRadius={120}
                   fill="#8884d8"
                   dataKey="value"
