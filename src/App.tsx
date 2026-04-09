@@ -1,119 +1,140 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "./assets/vite.svg";
-import heroImg from "./assets/hero.png";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 import "./App.css";
 
+// Boy and girl name lists
+const boyNames = [
+  "James",
+  "John",
+  "Robert",
+  "Michael",
+  "William",
+  "David",
+  "Richard",
+  "Joseph",
+  "Thomas",
+  "Christopher",
+];
+
+const girlNames = [
+  "Mary",
+  "Patricia",
+  "Jennifer",
+  "Linda",
+  "Barbara",
+  "Elizabeth",
+  "Susan",
+  "Jessica",
+  "Sarah",
+  "Karen",
+];
+
 function App() {
-  const [count, setCount] = useState(0);
+  const [boyCollapsed, setBoyCollapsed] = useState(false);
+  const [girlCollapsed, setGirlCollapsed] = useState(false);
+
+  // Count votes
+  const boyVotes = boyNames.length;
+  const girlVotes = girlNames.length;
+
+  // Prepare data for pie chart
+  const chartData = [
+    { name: "Boy", value: boyVotes, fill: "#3b82f6" },
+    { name: "Girl", value: girlVotes, fill: "#ec4899" },
+  ];
 
   return (
     <>
       <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>PUBLIC REPO</h1>
-          <p>
-            <code>Public Static App for testing Pulumi</code>
+        <div className="guess-container">
+          <h1>Guess who?</h1>
+          <p className="description">
+            The chart below shows how many people guessed it's a boy and how
+            many people guessed it's a girl
           </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
 
-      <div className="ticks"></div>
+          <div className="chart-wrapper">
+            <ResponsiveContainer width="100%" height={400}>
+              <PieChart>
+                <Pie
+                  data={chartData}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  label={({ name, value }) => `${name}: ${value}`}
+                  outerRadius={120}
+                  fill="#8884d8"
+                  dataKey="value"
+                >
+                  {chartData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.fill} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
+          <div className="votes-summary">
+            <div className="vote-card boy">
+              <div className="vote-count">{boyVotes}</div>
+              <div className="vote-label">Boy Votes</div>
+            </div>
+            <div className="vote-card girl">
+              <div className="vote-count">{girlVotes}</div>
+              <div className="vote-label">Girl Votes</div>
+            </div>
+          </div>
+
+          <div className="names-section">
+            <div className="collapsible">
+              <button
+                className="collapsible-button boy-button"
+                onClick={() => setBoyCollapsed(!boyCollapsed)}
+              >
+                <span className="button-icon">{boyCollapsed ? "▶" : "▼"}</span>
+                Boy Guessees ({boyNames.length})
+              </button>
+              {boyCollapsed && (
+                <div className="collapsible-content boy-content">
+                  <ul className="names-list">
+                    {boyNames.map((name, index) => (
+                      <li key={index}>{name}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+
+            <div className="collapsible">
+              <button
+                className="collapsible-button girl-button"
+                onClick={() => setGirlCollapsed(!girlCollapsed)}
+              >
+                <span className="button-icon">{girlCollapsed ? "▶" : "▼"}</span>
+                Girl Guessees ({girlNames.length})
+              </button>
+              {girlCollapsed && (
+                <div className="collapsible-content girl-content">
+                  <ul className="names-list">
+                    {girlNames.map((name, index) => (
+                      <li key={index}>{name}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
     </>
   );
 }
